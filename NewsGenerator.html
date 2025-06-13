@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="et">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Uudistegeneraator</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <h1>Uudistegeneraator</h1>
+    <div class="container">
+      <label for="category">Vali kategooria:</label>
+      <select id="category">
+        <option value="Tehnoloogia">Tehnoloogia</option>
+        <option value="Spordiuudised">Spordiuudised</option>
+        <option value="Majandus">Majandus</option>
+      </select>
+
+      <button onclick="generateNews()">Genereeri uudised</button>
+
+      <ul id="newsList"></ul>
+
+      <h3>Lisa oma uudis:</h3>
+      <input type="text" id="customNews" placeholder="Sisesta oma uudis..." />
+      <button onclick="addCustomNews()">Lisa uudis</button>
+
+      <button onclick="clearAndRegenerate()">
+        Tühjenda ja genereeri uuesti
+      </button>
+    </div>
+
+    <script>
+      const newsSamples = {
+        Tehnoloogia: [
+          "Uus Telefon.",
+          "Uus Ai.",
+          "Uus lendav auto.",
+        ],
+        Spordiuudised: [
+          "Eesti kiireim naine tegi Soomes vägeva rekordiparanduse.",
+          "VÄGEV! Karjääri parima võidu saanud Lajal jõudis ATP turniiril teise ringi .",
+          "Kümnevõistluse maailmarekordiomanikku vaevab endiselt vigastus: mul pole aimugi, kas taastusravi toimib.",
+        ],
+        Majandus: [
+          "Raha säästvate inimeste osakaal on järsult vähenenud.",
+          "LAENUD REGISTRISSE: tublimad saaksid laenu odavamalt, kehvemad jääksid üldse ilma.",
+          "PENSIONIGEENIUSTE NIPP: pane raha teise ja kolmandasse sambasse ja võta välja maksuvabalt.",
+        ],
+      };
+
+      function getRandomDate() {
+        const today = new Date();
+        const randomDaysAgo = Math.floor(Math.random() * 7);
+        const randomDate = new Date(today);
+        randomDate.setDate(today.getDate() - randomDaysAgo);
+        return randomDate.toLocaleDateString("et-EE");
+      }
+
+      function generateNews() {
+        const category = document.getElementById("category").value;
+        const news = newsSamples[category];
+        const list = document.getElementById("newsList");
+        list.innerHTML = "";
+
+        news.forEach((item) => {
+          const li = document.createElement("li");
+          li.innerHTML = `<strong>${item}</strong><br><span class="date">${getRandomDate()}</span>`;
+          list.appendChild(li);
+        });
+      }
+
+      function addCustomNews() {
+        const input = document.getElementById("customNews");
+        const newsText = input.value.trim();
+        if (newsText) {
+          const li = document.createElement("li");
+          li.innerHTML = `<strong>${newsText}</strong><br><span class="date">${getRandomDate()}</span>`;
+          document.getElementById("newsList").appendChild(li);
+          input.value = "";
+        }
+      }
+
+      function clearAndRegenerate() {
+        generateNews();
+      }
+    </script>
+  </body>
+</html>
